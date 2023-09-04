@@ -11,3 +11,39 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+body {
+  background-color: #ffffff;
+}
+#table{
+  color: rgb(11, 46, 73);
+  background: #a3d9e2;
+}
+
+
+#tableE{
+  background: #bdd9b5;
+}
+.ms-2{
+  color: rgb(166, 24, 24);
+  background-color: rgba(33, 82, 104, 0.497);
+}
+.MDBContainer{
+  display: flexbox;
+  justify-self: center;
+  justify-content: center;
+}
+.btnForma{
+  background: rgb(139, 222, 126);
+  color: white;
+  display: flex;
+  align-self: center;
+}
+.btnDolazak{
+  background: #8dc0cf;
+  color: aliceblue;
+}
+.btn2{
+  color: black;
+  background: #ffffff;
+  background-color: #ffffff;
+}

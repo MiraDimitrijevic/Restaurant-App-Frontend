@@ -36,3 +36,25 @@
     transform: rotate(360deg);
   }
 }
+
+.btnLogin{
+  background-color: black;
+  color: white;
+}
+
+.btn , .btn2 , .btn3{
+  background-color: rgb(255, 255, 255);
+  max-width: 80px;
+  font-size: 12px;
+  margin-right: 6px;
+}
+.dugmad{
+  display: inline-flex;
+}
+.ghost{
+  display: none;
+}
+
+.normal{
+  display: flex;
+}
