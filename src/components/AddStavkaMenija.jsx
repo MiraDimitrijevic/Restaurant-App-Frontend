@@ -41,7 +41,6 @@ function AddStavkaMenija({vrsteSM}) {
         Authorization: `Bearer ${window.sessionStorage.getItem('token')}`,
       },
     }).then((res) =>{
-      console.log(res.data);
       if(res.data.success === true) {
         alert("Uspesan unos stavke menija!" );
 } else {
@@ -49,7 +48,6 @@ function AddStavkaMenija({vrsteSM}) {
     
       }
     }).catch((e)=>{
-      console.log(e);
     
       
     });

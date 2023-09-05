@@ -30,22 +30,18 @@ function StavkaModal({stavkaIzmeni , showModal1} ) {
     //validacija
     e.preventDefault();
    let t= window.sessionStorage.getItem("token");
-   console.log(stavkaIzmeni);
     axios.put("http://127.0.0.1:8000/api/stavkaMenija/"+stavkaIzmeni.id, stavkaIzmeni, {
       headers: {
         Authorization: `Bearer ${t}`,
       },
     }).then((res) =>{
-      console.log(res);
        if(res.data.success=== true) {
       alert("Stavka je uspesno izmenjena!" );
 window.location.reload(true);
-         console.log(res.data);
        
 
       } 
     }).catch((e)=>{
-      console.log(e);
       alert("Stavka nije izmenjena!" );
 
       

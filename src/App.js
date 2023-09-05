@@ -4,14 +4,16 @@ import GuestRegisterPage from './components/GuestRegisterPage';
 import React from "react";
 import { Routes, Route}  from "react-router-dom";
 import NavBar from './components/NavBar';
-import Meni from './components/Meni';
+import Gosti from './components/Gosti';
+import MojProfil from './components/MojProfil';
+import Porudzbina from './components/Porudzbina';
 import PrikazIzmenaStavke from './components/PrikazIzmenaStavke';
 import AddStavkaMenija from './components/AddStavkaMenija';
 import { useState ,useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import $ from 'jquery';
-import StavkaPorudzbine from './components/StavkaPorudzbine';
+import PrikazIzmenaPorudzbine from './components/PrikazIzmenaPorudzbine';
 
 
 function App() {
@@ -24,8 +26,12 @@ function App() {
   const[stavkaIzmeni, setStavkaIzmeni]= useState();
   const[showModal1, setShowModal1]= useState('ghost');
   const[showModal2, setShowModal2]= useState('ghost');
+  const[showModal3, setShowModal3]= useState('ghost');
   const[stavkePorudzbine, setStavkePorudzbine]=useState([]);
   const[vrsteSM, setVrsteSM]= useState();
+  const[gosti, setGosti]=useState();
+  const[porudzbine, setPorudzbine]=useState();
+  const[porudzbinaIzmeni, setPorudzbinaIzmeni]=useState();
 
 
 
@@ -48,6 +54,7 @@ function App() {
       setToken(null);
       window.sessionStorage.setItem("token","");
       window.sessionStorage.setItem("userType", "g");
+      window.sessionStorage.setItem("userType_id", 0);
       window.sessionStorage.setItem("user_id", 0 );
       window.sessionStorage.setItem("token_reg","");
       navigate("/login");
@@ -60,30 +67,11 @@ function App() {
     
   });
 
-  const [podaciUser, setPodaciUser]=useState({
-    ime:"",
-    prezime:"",
-    godinaRodjenja:"",
-    korisnickoIme:"",
-    brojTelefona:"",
-    email: "",
-    password: "",
-    userType:"",
-    imaPopust:false,
-   /* zaduzenje:0,
-    datumZaposlenja:"",
-    plata:0,
-    napomena:"",
-    naOdmoru:false,
-    naBolovanju:false,
-    nadredjeni_id:""
-*/
-  });
+  const [podaciUser, setPodaciUser]=useState();
 
   function dodajUsername(e){
     let data=podaciZaPrijavu;
     data[e.target.name]=e.target.value;
-    console.log(data);
     setPodaciZaPrijavu(data);
   }
   function dodajLozinku(e){
@@ -100,13 +88,12 @@ window.sessionStorage.setItem("token", res.data.access_token );
 addToken(res.data.access_token);
 setUser_id(res.data.user_id);
 window.sessionStorage.setItem("userType", res.data.userType);
+window.sessionStorage.setItem("userType_id", res.data.ostalo.id);
 window.sessionStorage.setItem("user_id", res.data.user_id);
-setPodaciUser(res.data.user);
-console.log(podaciUser);
 navigate("/meni");
   } else {
     alert("Pogresi kredencijali! Pokusajte ponovo");
-
+ 
   }
 }).catch((e)=>{
   console.log(e);
@@ -114,9 +101,7 @@ navigate("/meni");
   }
 
  const obrisiStavku =(id)=>{
-  console.log("usao u metodu");
-  console.log("stavke porudzbine pre smanjivanja: "+ stavkePorudzbine);
-  console.log("stavke za smanjenje: "+ id);
+
 
     for(let i=0; i<stavkePorudzbine.length;i++){
     if(stavkePorudzbine[i].stavka_menija_id===id) {
@@ -157,21 +142,17 @@ setStavkePorudzbine([...stavkePorudzbine ,{"stavka_menija_id":stavka.id,"naziv":
   }
 
   function poruci(){
-    console.log(stavkePorudzbine);
-    var data={"stavke": stavkePorudzbine, "gost_id":window.sessionStorage.getItem("user_id")};
-    console.log(data);
+    var data={"stavke": stavkePorudzbine, "gost_id":window.sessionStorage.getItem('userType_id')};
     axios.post("http://127.0.0.1:8000/api/porudzbina", data , {
       headers: {
         Authorization: `Bearer ${window.sessionStorage.getItem('token')}`,
       },
     }).then((res) =>{
-      console.log(res.data);
       if(res.data.success === true) {
         alert("Porucivanje uspesno! BROJ PORUDZBINE: "+res.data.porudzbina_id);
         window.location.reload(true);
  } else {
         alert("Neuspesno porucivanje, pokusajte ponovo." );
-         console.log(res);
       }
     }).catch((error)=>{
       console.error(error.response.data);
@@ -182,16 +163,45 @@ setStavkePorudzbine([...stavkePorudzbine ,{"stavka_menija_id":stavka.id,"naziv":
   }
 
   const deleteStavka = async (stavkaID) => {
-    console.log(stavkaID);
     var config = {method: "delete",
     url: "http://127.0.0.1:8000/api/stavkaMenija/"+stavkaID,
     headers: {Authorization: `Bearer ${window.sessionStorage.getItem("token")}`,},};
     const res = await axios(config);
     if (res.data.success===true) {alert("Stavka menija je uspesno obrisana!" );
     window.location.reload(true);
-    //navigate("/");   
-    console.log(res.data);}
+    }
     else {alert("Doslo je do greske, stavka menija nije obrisana!" );}};
+
+
+
+    function dajPopust(gost){
+    axios.put("http://127.0.0.1:8000/api/gost/"+gost.id, gost,{
+      headers: {
+        Authorization: `Bearer ${window.sessionStorage.getItem('token')}`,
+      },
+    }).then((res) =>{
+       if(res.data.success=== true) {
+      alert("Korisnik je dobio popust od 20%!" );
+window.location.reload(true);
+    } else {      alert("Korisnik ne moze dobiti popust zbog zaduzenja!" );
+  }
+    }).catch((error)=>{
+      console.error(error.response.data);
+
+      
+    });
+    }
+
+    function prikaziStavke(porudzbina){
+      axios.get("http://127.0.0.1:8000/api/porudzbina/"+porudzbina.id+"/stavkePorudzbine" , {
+    headers: {
+      Authorization: `Bearer ${window.sessionStorage.getItem('token')}`,
+    },
+  }).then((res) =>{
+    setStavkePorudzbine(res.data.stavke);
+});
+navigate("/porudzbina");
+    }
 
   $(document).ready( 
     function () {
@@ -235,7 +245,6 @@ setStavkePorudzbine([...stavkePorudzbine ,{"stavka_menija_id":stavka.id,"naziv":
     if(window.sessionStorage.getItem("userType")==="k" || window.sessionStorage.getItem("userType")==="g")
       { alert("Nisu vam dostupne ove opcije");}  else{
     let stavka = $('#tableMeni').DataTable().row($(this).closest('tr')).data();
-    console.log(stavka);
     setStavkaIzmeni(stavka);
     setShowModal1('normal');
    }});
@@ -248,10 +257,129 @@ setStavkePorudzbine([...stavkePorudzbine ,{"stavka_menija_id":stavka.id,"naziv":
   
   } );
 
+  $(document).ready( 
+    function () {
+        
+        $('#tableGosti').DataTable( {
+  
+            "bDestroy": true,
+            columnDefs: [{
+                "defaultContent": "-",
+                "targets": "_all"
+              }],
+              buttons: [
+                'copy', 'excel', 'pdf'
+            ],
+            data: gosti,
+            columns: [
+              {"data":"id", visible:false},
+              {"data":"licniPodaci.id", visible:false},
+                { "data": "licniPodaci.ime" },
+                { "data": "licniPodaci.prezime"},
+                { "data": "licniPodaci.godinaRodjenja" , visible:false},
+                { "data": "imaPopust" },
+                { "data": "zaduzenje" },
+                {"data":null , defaultContent:"<button class='btn2' variant='primary'>daj popust</button> " ,
+                visible: window.sessionStorage.getItem("userType")==="k" ? true :false}, ]},
+        );
+  $('#tableGosti .btn2 ').on('click', function(){
+    if(window.sessionStorage.getItem("userType")==="m" || window.sessionStorage.getItem("userType")==="g")
+      { alert("Nisu vam dostupne ove opcije");}  else{
+    let gost = $('#tableGosti').DataTable().row($(this).closest('tr')).data();
+    if(gost.imaPopust==1){alert("Ovaj gost vec ima popust!");}
+    else
+     dajPopust(gost);
+   }});
+  
+  } );
+
+
+  $(document).ready( 
+    function () {
+        
+        $('#tablePorudzbine').DataTable( {
+  
+            "bDestroy": true,
+            columnDefs: [{
+                "defaultContent": "-",
+                "targets": "_all"
+              }],
+              buttons: [
+                'copy', 'excel', 'pdf'
+            ],
+            data: porudzbine,
+            columns: [
+              {"data":"id", visible:false},
+              {"data":"datumVremePorudzbine"},
+                { "data": "gost.licniPodaci.ime" },
+                { "data": "gost.licniPodaci.prezime"},
+                { "data": "popust" },
+                { "data": "ukupnaCena" },
+                { "data": "placeno" },
+                { "data": "konobar.licniPodaci.korisnickoIme" },
+                {"data":null , defaultContent:"<button class='btn2' variant='primary'>naplati</button> " ,
+                visible: window.sessionStorage.getItem("userType")==="k" ? true :false},
+                {"data":null , defaultContent:"<button class='btn3' variant='primary'>prikazi</button> " ,
+                visible: window.sessionStorage.getItem("userType")==="k" ? true :false},
+               ]},
+        );
+  $('#tablePorudzbine .btn2 ').on('click', function(){
+    if(window.sessionStorage.getItem("userType")==="m" || window.sessionStorage.getItem("userType")==="g")
+      { alert("Nisu vam dostupne ove opcije");}  else{
+    let porudzbina = $('#tablePorudzbine').DataTable().row($(this).closest('tr')).data();
+    if(porudzbina.placeno==1){alert("Porudzbina je vec placena!");}
+    else{
+      setPorudzbinaIzmeni(porudzbina);
+    setShowModal3('normal');
+    }
+   }});
+   $('#tablePorudzbine .btn3 ').on('click', function(){
+    if(window.sessionStorage.getItem("userType")==="m" || window.sessionStorage.getItem("userType")==="g")
+      { alert("Nisu vam dostupne ove opcije");}  else{
+    let porudzbina = $('#tablePorudzbine').DataTable().row($(this).closest('tr')).data();
+
+     prikaziStavke(porudzbina);
+   }});
+  
+  } );
+
+  $(document).ready( 
+    function () {
+        
+        $('#tableSP').DataTable( {
+  
+            "bDestroy": true,
+            columnDefs: [{
+                "defaultContent": "-",
+                "targets": "_all"
+              }],
+              buttons: [
+                'copy', 'excel', 'pdf'
+            ],
+            data: stavkePorudzbine,
+            columns: [
+              {"data":"id", visible:false},
+              {"data":"stavkaMenija.naziv"},
+                { "data": "kolicina" },
+
+               ]},
+        );
+  
+  } );
+
 
   useEffect(()=>{
     if( window.sessionStorage.getItem("token") !== "" && window.sessionStorage.getItem("token") !== null){
-
+      if(podaciUser == null) {
+        axios.get("http://127.0.0.1:8000/api/user/"+window.sessionStorage.getItem("user_id") , {
+          headers: {
+            Authorization: `Bearer ${window.sessionStorage.getItem('token')}`,
+          },
+        }).then((res) =>{
+          setPodaciUser(res.data.user);
+          
+  
+     }, [podaciUser] ); }
  
       if(meni == null) {
         axios.get("http://127.0.0.1:8000/api/stavkaMenija" , {
@@ -259,7 +387,6 @@ setStavkePorudzbine([...stavkePorudzbine ,{"stavka_menija_id":stavka.id,"naziv":
             Authorization: `Bearer ${window.sessionStorage.getItem('token')}`,
           },
         }).then((res) =>{
-          console.log(res);
           setMeni(res.data.stavkeMenija);
           
   
@@ -271,16 +398,42 @@ setStavkePorudzbine([...stavkePorudzbine ,{"stavka_menija_id":stavka.id,"naziv":
           Authorization: `Bearer ${window.sessionStorage.getItem('token')}`,
         },
       }).then((res) =>{
-        console.log(res);
         setVrsteSM(res.data.vrste);
         
 
    }, [vrsteSM] ); }
 
-   
 
+if(window.sessionStorage.getItem("userType") !== null && window.sessionStorage.getItem("userType") === "k"){
+
+
+   if(gosti == null) {
+    axios.get("http://127.0.0.1:8000/api/gost" , {
+      headers: {
+        Authorization: `Bearer ${window.sessionStorage.getItem('token')}`,
+      },
+    }).then((res) =>{
+      setGosti(res.data.gosti);
+      
+
+ }, [gosti] ); }
+
+ if(porudzbine == null) {
+  axios.get("http://127.0.0.1:8000/api/porudzbina" , {
+    headers: {
+      Authorization: `Bearer ${window.sessionStorage.getItem('token')}`,
+    },
+  }).then((res) =>{
+    setPorudzbine(res.data.porudzbine);
+    
+
+}, [porudzbine] ); }
+
+}
+   
+//end of use-effect
     }
-  })
+  });
   return (
     <>
       <Routes>
@@ -292,7 +445,10 @@ setStavkePorudzbine([...stavkePorudzbine ,{"stavka_menija_id":stavka.id,"naziv":
       <Route path='meni' element={<PrikazIzmenaStavke showModal1={showModal1} showModal2={showModal2}
        stavkaIzmeni={stavkaIzmeni} stavkePorudzbine={stavkePorudzbine} obrisiStavku={obrisiStavku} poruci={poruci}></PrikazIzmenaStavke>}></Route>
         <Route path='addStavkaMenija' element={<AddStavkaMenija  vrsteSM={vrsteSM}></AddStavkaMenija>}></Route>
-
+        <Route path='gosti' element={<Gosti ></Gosti>}></Route>
+        <Route path='porudzbine' element={<PrikazIzmenaPorudzbine  porudzbinaIzmeni={porudzbinaIzmeni} showModal3={showModal3}></PrikazIzmenaPorudzbine>}></Route>
+        <Route path='porudzbina' element={<Porudzbina ></Porudzbina>}></Route>
+        <Route path='profil' element={<MojProfil podaciUser={podaciUser} ></MojProfil>}></Route>
  </Route>
       
       </Routes>

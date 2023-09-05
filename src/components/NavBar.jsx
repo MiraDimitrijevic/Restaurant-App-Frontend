@@ -27,10 +27,10 @@ function NavBar(props) {
          ( <a className="nav-link active"  onClick={setToken} aria-current="page" href="/meni">Meni</a> ) :  
          ( <a  className="nav-link disabled"  onClick={setToken} aria-current="page"  tabindex="-1" aria-disabled="true" href="/meni">Meni</a> ) }
           </li>
-          <li className="nav-item">
+     ,     <li className="nav-item">
         { "" != window.sessionStorage.getItem("token") ? 
-        ( <a className="nav-link active"  onClick={setToken} aria-current="page" href="/profile">Moj profil</a> )
-         :  ( <a  className="nav-link disabled"  onClick={setToken} aria-current="page"  tabindex="-1" aria-disabled="true" href="/profile">Moj profil</a> ) }
+        ( <a className="nav-link active"  onClick={setToken} aria-current="page" href="/profil">Moj profil</a> )
+         :  ( <a  className="nav-link disabled"  onClick={setToken} aria-current="page"  tabindex="-1" aria-disabled="true" href="/profil">Moj profil</a> ) }
           </li>
           <li className="nav-item">
           { "" != window.sessionStorage.getItem("token") && window.sessionStorage.getItem("userType")=="m" ?
