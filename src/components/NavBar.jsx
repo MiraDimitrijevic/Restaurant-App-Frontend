@@ -33,9 +33,9 @@ function NavBar(props) {
          :  ( <a  className="nav-link disabled"  onClick={setToken} aria-current="page"  tabindex="-1" aria-disabled="true" href="/profile">Moj profil</a> ) }
           </li>
           <li className="nav-item">
-          { "" != window.sessionStorage.getItem("token") && window.sessionStorage.getItem("userType")=="g" ?
-           ( <a className="nav-link active"  onClick={setToken} aria-current="page" href="/poruci">Poruci</a>)
-             :    ( <a  className="nav-link disabled"  onClick={setToken} aria-current="page"  tabindex="-1" aria-disabled="true" href="/poruci">Poruci</a>)  }
+          { "" != window.sessionStorage.getItem("token") && window.sessionStorage.getItem("userType")=="m" ?
+           ( <a className="nav-link active"  onClick={setToken} aria-current="page" href="/addStavkaMenija">Dodaj stavku u meni</a>)
+             :    ( <a  className="nav-link disabled"  onClick={setToken} aria-current="page"  tabindex="-1" aria-disabled="true" href="/addStavkaMenija">Dodaj stavku u meni</a>)  }
           </li>
           <li className="nav-item">
           { "" != window.sessionStorage.getItem("token") && window.sessionStorage.getItem("userType")=="k" ?

@@ -24,7 +24,7 @@ function Meni() {
         <th>Vrsta</th>
         <th>Poruci</th>
         <th>Izmeni</th>
-        <th>Obrisi</th>
+        <th >Obrisi</th>
         </tr>
         </thead>
 

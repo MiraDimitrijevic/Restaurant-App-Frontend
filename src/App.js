@@ -6,10 +6,12 @@ import { Routes, Route}  from "react-router-dom";
 import NavBar from './components/NavBar';
 import Meni from './components/Meni';
 import PrikazIzmenaStavke from './components/PrikazIzmenaStavke';
+import AddStavkaMenija from './components/AddStavkaMenija';
 import { useState ,useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import $ from 'jquery';
+import StavkaPorudzbine from './components/StavkaPorudzbine';
 
 
 function App() {
@@ -19,9 +21,12 @@ function App() {
   const[userType , setUserType]= useState('g');
   const[meni, setMeni]= useState();
   const[user_id, setUser_id]= useState(0);
-  const[stavkaID, setStavkaID]= useState(0);
   const[stavkaIzmeni, setStavkaIzmeni]= useState();
   const[showModal1, setShowModal1]= useState('ghost');
+  const[showModal2, setShowModal2]= useState('ghost');
+  const[stavkePorudzbine, setStavkePorudzbine]=useState([]);
+  const[vrsteSM, setVrsteSM]= useState();
+
 
 
   function  addToken(token){
@@ -108,6 +113,74 @@ navigate("/meni");
 });
   }
 
+ const obrisiStavku =(id)=>{
+  console.log("usao u metodu");
+  console.log("stavke porudzbine pre smanjivanja: "+ stavkePorudzbine);
+  console.log("stavke za smanjenje: "+ id);
+
+    for(let i=0; i<stavkePorudzbine.length;i++){
+    if(stavkePorudzbine[i].stavka_menija_id===id) {
+      let kolicina=stavkePorudzbine[i].kolicina-1;
+      if(kolicina===0){
+        setStavkePorudzbine([stavkePorudzbine.splice(i,1)]);
+        if(stavkePorudzbine.length==0){
+          setStavkePorudzbine([]);
+          setShowModal2(false);
+        }
+  } else{
+     var stavke=Array.from(stavkePorudzbine);
+      stavke[i].kolicina=kolicina;
+      setStavkePorudzbine(stavke);
+
+    }
+    break;
+    }
+    }
+  }
+
+ function dodajStavkuPorudzbine (stavka) {
+  var stavke;
+  var stavkaPostoji=false;
+  for(var i=0;i<stavkePorudzbine.length;i++){
+  if(stavkePorudzbine[i].stavka_menija_id===stavka.id){
+    var kolicina=stavkePorudzbine[i].kolicina+1;
+    stavke=Array.from(stavkePorudzbine);
+    stavke[i].kolicina=kolicina;
+    setStavkePorudzbine(stavke);
+  stavkaPostoji=true;
+  break;
+  }
+  };
+if(stavkaPostoji==false)
+setStavkePorudzbine([...stavkePorudzbine ,{"stavka_menija_id":stavka.id,"naziv":stavka.naziv, "kolicina":1,"iznos":0}] ) ;
+    
+  }
+
+  function poruci(){
+    console.log(stavkePorudzbine);
+    var data={"stavke": stavkePorudzbine, "gost_id":window.sessionStorage.getItem("user_id")};
+    console.log(data);
+    axios.post("http://127.0.0.1:8000/api/porudzbina", data , {
+      headers: {
+        Authorization: `Bearer ${window.sessionStorage.getItem('token')}`,
+      },
+    }).then((res) =>{
+      console.log(res.data);
+      if(res.data.success === true) {
+        alert("Porucivanje uspesno! BROJ PORUDZBINE: "+res.data.porudzbina_id);
+        window.location.reload(true);
+ } else {
+        alert("Neuspesno porucivanje, pokusajte ponovo." );
+         console.log(res);
+      }
+    }).catch((error)=>{
+      console.error(error.response.data);
+    
+      
+    });
+    
+  }
+
   const deleteStavka = async (stavkaID) => {
     console.log(stavkaID);
     var config = {method: "delete",
@@ -142,9 +215,12 @@ navigate("/meni");
                 { "data": "napomene" },
                 { "data": "jedinicaMere" },
                 { "data": "vrsta.naziv" },
-                {"data":null , defaultContent:"<button class='btn1' variant='primary'>poruci</button> " },
-                {"data":null , defaultContent:"<button class='btn2' variant='primary'>izmeni</button> " },
-                {"data":null , defaultContent:"<button class='btn3' variant='primary'>obrisi</button> " }
+                {"data":null , defaultContent:"<button class='btn1' variant='primary'>+</button> ",
+                visible: window.sessionStorage.getItem("userType")==="g" ? true :false },
+                {"data":null , defaultContent:"<button class='btn2' variant='primary'>izmeni</button> " ,
+                visible: window.sessionStorage.getItem("userType")==="m" ? true :false},
+                {"data":null , defaultContent:"<button class='btn3' variant='primary'>obrisi</button> ",
+                visible: window.sessionStorage.getItem("userType")==="m" ? true :false }
                
           ]},
         );
@@ -152,9 +228,11 @@ navigate("/meni");
           if(window.sessionStorage.getItem("userType")==="k" || window.sessionStorage.getItem("userType")==="m") 
            { alert("Nisu vam dostupne ove opcije");}  else{
           let stavka = $('#tableMeni').DataTable().row($(this).closest('tr')).data();
-         setStavkaID(stavka.id); }});
+           dodajStavkuPorudzbine(stavka);
+       setShowModal2('normal');
+         }});
   $('#tableMeni .btn2 ').on('click', function(){
-    if(window.sessionStorage.getItem("userType")==="k" || window.sessionStorage.getItem("userType")==="m")
+    if(window.sessionStorage.getItem("userType")==="k" || window.sessionStorage.getItem("userType")==="g")
       { alert("Nisu vam dostupne ove opcije");}  else{
     let stavka = $('#tableMeni').DataTable().row($(this).closest('tr')).data();
     console.log(stavka);
@@ -173,6 +251,8 @@ navigate("/meni");
 
   useEffect(()=>{
     if( window.sessionStorage.getItem("token") !== "" && window.sessionStorage.getItem("token") !== null){
+
+ 
       if(meni == null) {
         axios.get("http://127.0.0.1:8000/api/stavkaMenija" , {
           headers: {
@@ -181,10 +261,24 @@ navigate("/meni");
         }).then((res) =>{
           console.log(res);
           setMeni(res.data.stavkeMenija);
-  
           
   
      }, [meni] ); }
+
+     if(vrsteSM == null) {
+      axios.get("http://127.0.0.1:8000/api/vrstaStavkeMenija" , {
+        headers: {
+          Authorization: `Bearer ${window.sessionStorage.getItem('token')}`,
+        },
+      }).then((res) =>{
+        console.log(res);
+        setVrsteSM(res.data.vrste);
+        
+
+   }, [vrsteSM] ); }
+
+   
+
     }
   })
   return (
@@ -195,9 +289,11 @@ navigate("/meni");
       <Route path='/register' element={<GuestRegisterPage/>}></Route>
       <Route path='/' element={<NavBar token={token} logout={logout} userType={userType}/>}>
       
-      <Route path='meni' element={<PrikazIzmenaStavke showModal1={showModal1}  stavkaIzmeni={stavkaIzmeni}></PrikazIzmenaStavke>}></Route>
+      <Route path='meni' element={<PrikazIzmenaStavke showModal1={showModal1} showModal2={showModal2}
+       stavkaIzmeni={stavkaIzmeni} stavkePorudzbine={stavkePorudzbine} obrisiStavku={obrisiStavku} poruci={poruci}></PrikazIzmenaStavke>}></Route>
+        <Route path='addStavkaMenija' element={<AddStavkaMenija  vrsteSM={vrsteSM}></AddStavkaMenija>}></Route>
 
-      </Route>
+ </Route>
       
       </Routes>
     
