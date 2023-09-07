@@ -25,7 +25,7 @@ function PorudzbinaForma({stavkePorudzbine , showModal2 , obrisiStavku, poruci} 
 
   return (
     
-   
+
     <MDBContainer fluid  className={showModal2}>
 
     <MDBRow className='d-flex justify-content-center align-items-center h-100'>

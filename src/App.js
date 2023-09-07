@@ -7,6 +7,7 @@ import NavBar from './components/NavBar';
 import Gosti from './components/Gosti';
 import MojProfil from './components/MojProfil';
 import Porudzbina from './components/Porudzbina';
+import Smene from './components/Smene';
 import PrikazIzmenaStavke from './components/PrikazIzmenaStavke';
 import AddStavkaMenija from './components/AddStavkaMenija';
 import { useState ,useEffect } from 'react';
@@ -14,6 +15,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import $ from 'jquery';
 import PrikazIzmenaPorudzbine from './components/PrikazIzmenaPorudzbine';
+import ZaposleniRegisterPage from './components/ZaposleniRegisterPage';
 
 
 function App() {
@@ -30,6 +32,7 @@ function App() {
   const[stavkePorudzbine, setStavkePorudzbine]=useState([]);
   const[vrsteSM, setVrsteSM]= useState();
   const[gosti, setGosti]=useState();
+  const[smene, setSmene]=useState();
   const[porudzbine, setPorudzbine]=useState();
   const[porudzbinaIzmeni, setPorudzbinaIzmeni]=useState();
 
@@ -103,11 +106,17 @@ navigate("/meni");
  const obrisiStavku =(id)=>{
 
 
-    for(let i=0; i<stavkePorudzbine.length;i++){
+    for(var i=0; i<stavkePorudzbine.length;i++){
     if(stavkePorudzbine[i].stavka_menija_id===id) {
       let kolicina=stavkePorudzbine[i].kolicina-1;
       if(kolicina===0){
-        setStavkePorudzbine([stavkePorudzbine.splice(i,1)]);
+       var stavke=[];
+        for(var j=0;j<stavkePorudzbine.length;j++){
+          if(j!=i)
+          stavke.push(stavkePorudzbine[j]);
+        }
+        setStavkePorudzbine(stavke);
+        console.log(stavkePorudzbine);
         if(stavkePorudzbine.length==0){
           setStavkePorudzbine([]);
           setShowModal2(false);
@@ -203,6 +212,29 @@ window.location.reload(true);
 navigate("/porudzbina");
     }
 
+    function zakljuciSmenu(){
+console.log(window.sessionStorage.getItem("userType_id"));
+var konobar_id= window.sessionStorage.getItem("userType_id");
+      axios.post("http://127.0.0.1:8000/api/radnaSmena",{konobar_id}, {
+        headers: {
+          Authorization: `Bearer ${window.sessionStorage.getItem('token')}`,
+        },
+      }).then((res) =>{
+        console.log(res.data);
+        if(res.data.success === true) {
+          alert("Smena uspesno zakljucena! Ukupan promet: "+res.data.ukupanPromet);
+          window.location.reload(true);
+   }
+    else {
+    alert("Smena je vec zakljucena!");
+        }
+      }).catch((error)=>{
+        console.error(error.response.data);
+      
+        
+      });
+    }
+
   $(document).ready( 
     function () {
         
@@ -293,6 +325,30 @@ navigate("/porudzbina");
   
   } );
 
+  $(document).ready( 
+    function () {
+        
+        $('#tableSmene').DataTable( {
+  
+            "bDestroy": true,
+            columnDefs: [{
+                "defaultContent": "-",
+                "targets": "_all"
+              }],
+              buttons: [
+                'copy', 'excel', 'pdf'
+            ],
+            data: smene,
+            columns: [
+              {"data":"id", visible:false},
+              {"data":"datum"},
+              { "data": "smena" },
+              { "data": "ukupanPromet" },
+              { "data": "konobar.licniPodaci.ime"},
+              { "data": "konobar.licniPodaci.prezime"},
+            ]   
+  } ); });
+
 
   $(document).ready( 
     function () {
@@ -382,6 +438,7 @@ navigate("/porudzbina");
      }, [podaciUser] ); }
  
       if(meni == null) {
+        console.log("Usao u meni");
         axios.get("http://127.0.0.1:8000/api/stavkaMenija" , {
           headers: {
             Authorization: `Bearer ${window.sessionStorage.getItem('token')}`,
@@ -391,6 +448,9 @@ navigate("/porudzbina");
           
   
      }, [meni] ); }
+
+   
+     if(window.sessionStorage.getItem("userType") !== null && window.sessionStorage.getItem("userType") === "m"){
 
      if(vrsteSM == null) {
       axios.get("http://127.0.0.1:8000/api/vrstaStavkeMenija" , {
@@ -403,7 +463,19 @@ navigate("/porudzbina");
 
    }, [vrsteSM] ); }
 
+   if(smene == null) {
+    console.log("Usao u metodu");
+    axios.get("http://127.0.0.1:8000/api/radnaSmena" , {
+      headers: {
+        Authorization: `Bearer ${window.sessionStorage.getItem('token')}`,
+      },
+    }).then((res) =>{
+      setSmene(res.data.smene);
+      console.log(res);
+  
+  }, [smene] ); }
 
+  }
 if(window.sessionStorage.getItem("userType") !== null && window.sessionStorage.getItem("userType") === "k"){
 
 
@@ -418,7 +490,10 @@ if(window.sessionStorage.getItem("userType") !== null && window.sessionStorage.g
 
  }, [gosti] ); }
 
+
+
  if(porudzbine == null) {
+  
   axios.get("http://127.0.0.1:8000/api/porudzbina" , {
     headers: {
       Authorization: `Bearer ${window.sessionStorage.getItem('token')}`,
@@ -428,6 +503,8 @@ if(window.sessionStorage.getItem("userType") !== null && window.sessionStorage.g
     
 
 }, [porudzbine] ); }
+
+
 
 }
    
@@ -440,7 +517,7 @@ if(window.sessionStorage.getItem("userType") !== null && window.sessionStorage.g
       <Route path='/login' element={ <LoginPage addToken={addToken}  dodajLozinku={dodajLozinku}  dodajUsername = {dodajUsername} login={login}  podaciZaPrijavu={podaciZaPrijavu}/>}></Route>
       
       <Route path='/register' element={<GuestRegisterPage/>}></Route>
-      <Route path='/' element={<NavBar token={token} logout={logout} userType={userType}/>}>
+      <Route path='/' element={<NavBar token={token} logout={logout} userType={userType} zakljuciSmenu={zakljuciSmenu}/>}>
       
       <Route path='meni' element={<PrikazIzmenaStavke showModal1={showModal1} showModal2={showModal2}
        stavkaIzmeni={stavkaIzmeni} stavkePorudzbine={stavkePorudzbine} obrisiStavku={obrisiStavku} poruci={poruci}></PrikazIzmenaStavke>}></Route>
@@ -448,7 +525,10 @@ if(window.sessionStorage.getItem("userType") !== null && window.sessionStorage.g
         <Route path='gosti' element={<Gosti ></Gosti>}></Route>
         <Route path='porudzbine' element={<PrikazIzmenaPorudzbine  porudzbinaIzmeni={porudzbinaIzmeni} showModal3={showModal3}></PrikazIzmenaPorudzbine>}></Route>
         <Route path='porudzbina' element={<Porudzbina ></Porudzbina>}></Route>
+        <Route path='smene' element={<Smene ></Smene>}></Route>
         <Route path='profil' element={<MojProfil podaciUser={podaciUser} ></MojProfil>}></Route>
+        <Route path='registerZ' element={<ZaposleniRegisterPage ></ZaposleniRegisterPage>}></Route>
+
  </Route>
       
       </Routes>

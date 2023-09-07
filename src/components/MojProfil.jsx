@@ -26,6 +26,10 @@ console.log(podaciUser);
   function izmeniUsera(e){
     e.preventDefault();
    var t=window.sessionStorage.getItem("token");
+   if(podaciUser.password==null || podaciUser.password==""){
+   alert("Morate uneti lozinku kako biste izmenili podatke!");
+   return;
+  }
 axios.put("http://127.0.0.1:8000/api/user/"+ window.sessionStorage.getItem("user_id"), podaciUser, {
   headers: {
     Authorization: `Bearer ${t}`,
@@ -37,11 +41,11 @@ axios.put("http://127.0.0.1:8000/api/user/"+ window.sessionStorage.getItem("user
     navigate("/meni");
 
   } else {
-    alert("Neuspesna izmena, pokušajte ponovo" );
+  alert("Neuspesna izmena, pokušajte ponovo" );
 
   }
-}).catch((e)=>{
-  console.log(e.response.data);
+}).catch((error)=>{
+  console.error(error);
   
 });
   }

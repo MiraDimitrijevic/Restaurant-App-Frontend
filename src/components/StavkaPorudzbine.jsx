@@ -15,13 +15,13 @@ import {
 } from 'mdb-react-ui-kit';
 
 
-
 function StavkaPorudzbine({stavka, obrisiStavku} ) {
+  const[visible, setVisible]= useState('normal');
 
   return (
     
-   
-    <MDBContainer fluid>
+ 
+    <MDBContainer fluid className={visible}   >
 
     <MDBRow className='d-flex justify-content-center align-items-center h-100'>
       <MDBCol>
@@ -31,7 +31,8 @@ function StavkaPorudzbine({stavka, obrisiStavku} ) {
             <MDBCol><p>{stavka.naziv}</p></MDBCol>
             <MDBCol><p>{stavka.kolicina}</p></MDBCol>
             <MDBCol>                 <div className="d-flex justify-content-end pt-3">
-                  <button className='btnForma' color='warning' size='lg' onClick={()=>obrisiStavku(stavka.stavka_menija_id)}>-</button>
+                  <button className='btnForma' color='warning' size='lg' onClick={()=>{obrisiStavku(stavka.stavka_menija_id);
+                if(stavka.kolicina==0) setVisible('ghost'); }}>-</button>
                 </div>
             </MDBCol>
             </MDBRow>

@@ -49,13 +49,18 @@ function NavBar(props) {
           </li>
           <li className="nav-item">
           { "" != window.sessionStorage.getItem("token") && window.sessionStorage.getItem("userType")=="m" ? 
-          ( <a className="nav-link active"  onClick={setToken} aria-current="page" href="/smena">Smena</a>) 
-           :    ( <a  className="nav-link disabled"  onClick={setToken} aria-current="page"  tabindex="-1" aria-disabled="true" href="/smena">Smena</a>)  }
+          ( <a className="nav-link active"  onClick={setToken} aria-current="page" href="/smene">Pregled radnih dana</a>) 
+           :    ( <a  className="nav-link disabled"  onClick={setToken} aria-current="page"  tabindex="-1" aria-disabled="true" href="/smene">Smena</a>)  }
+          </li>
+          <li className="nav-item">
+          { "" != window.sessionStorage.getItem("token") && window.sessionStorage.getItem("userType")=="k" ? 
+          ( <a className="nav-link active"  onClick={props.zakljuciSmenu} aria-current="page"/* href="/meni"*/>Zakljuci smenu</a>) 
+           :    ( <a  className="nav-link disabled"  onClick={props.zakljuciSmenu} aria-current="page"  tabindex="-1" aria-disabled="true" href="/meni">Zakljuci smenu</a>)  }
           </li>
           <li className="nav-item">
           { "" != window.sessionStorage.getItem("token") && window.sessionStorage.getItem("userType")=="m" ? 
-          ( <a className="nav-link active"  onClick={setToken} aria-current="page" href="/zaposleni">Zaposleni</a>) 
-           :    ( <a  className="nav-link disabled"  onClick={setToken} aria-current="page"  tabindex="-1" aria-disabled="true" href="/zaposleni">Zaposleni</a>)  }
+          ( <a className="nav-link active"  onClick={setToken} aria-current="page" href="/registerZ">Zaposleni</a>) 
+           :    ( <a  className="nav-link disabled"  onClick={setToken} aria-current="page"  tabindex="-1" aria-disabled="true" href="/registerZ">Zaposleni</a>)  }
           </li>
           
           <li className="nav-item">
