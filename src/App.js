@@ -229,7 +229,7 @@ var konobar_id= window.sessionStorage.getItem("userType_id");
     alert("Smena je vec zakljucena!");
         }
       }).catch((error)=>{
-        console.error(error.response.data);
+        console.error(error.response);
       
         
       });
@@ -257,11 +257,11 @@ var konobar_id= window.sessionStorage.getItem("userType_id");
                 { "data": "napomene" },
                 { "data": "jedinicaMere" },
                 { "data": "vrsta.naziv" },
-                {"data":null , defaultContent:"<button class='btn1' variant='primary'>+</button> ",
-                visible: window.sessionStorage.getItem("userType")==="g" ? true :false },
-                {"data":null , defaultContent:"<button class='btn2' variant='primary'>izmeni</button> " ,
+                {"data":null , defaultContent:"<button class='btn1' variant='primary' style='background-color:white;text-align:center;width:30px;'>+</button> ",
+                visible: window.sessionStorage.getItem("userType")==="g" ? true :false},
+                {"data":null , defaultContent:"<button class='btn2' variant='primary'  style='background-color:white;text-align:center;width:70px;font-size:18px;'>izmeni</button> " ,
                 visible: window.sessionStorage.getItem("userType")==="m" ? true :false},
-                {"data":null , defaultContent:"<button class='btn3' variant='primary'>obrisi</button> ",
+                {"data":null , defaultContent:"<button class='btn3' variant='primary'  style='background-color:white;text-align:center;width:70px;font-size:18px;'>obrisi</button> ",
                 visible: window.sessionStorage.getItem("userType")==="m" ? true :false }
                
           ]},
@@ -311,7 +311,7 @@ var konobar_id= window.sessionStorage.getItem("userType_id");
                 { "data": "licniPodaci.godinaRodjenja" , visible:false},
                 { "data": "imaPopust" },
                 { "data": "zaduzenje" },
-                {"data":null , defaultContent:"<button class='btn2' variant='primary'>daj popust</button> " ,
+                {"data":null , defaultContent:"<button class='btn2' variant='primary'  style='background-color:white;text-align:center;width:100px;font-size:18px;'>popust</button> " ,
                 visible: window.sessionStorage.getItem("userType")==="k" ? true :false}, ]},
         );
   $('#tableGosti .btn2 ').on('click', function(){
@@ -373,9 +373,9 @@ var konobar_id= window.sessionStorage.getItem("userType_id");
                 { "data": "ukupnaCena" },
                 { "data": "placeno" },
                 { "data": "konobar.licniPodaci.korisnickoIme" },
-                {"data":null , defaultContent:"<button class='btn2' variant='primary'>naplati</button> " ,
+                {"data":null , defaultContent:"<button class='btn2' variant='primary'  style='background-color:white;text-align:center;width:70px; font-size:18px;'>naplati</button> " ,
                 visible: window.sessionStorage.getItem("userType")==="k" ? true :false},
-                {"data":null , defaultContent:"<button class='btn3' variant='primary'>prikazi</button> " ,
+                {"data":null , defaultContent:"<button class='btn3' variant='primary'  style='background-color:white;text-align:center;width:70px;font-size:18px;'>prikazi</button> " ,
                 visible: window.sessionStorage.getItem("userType")==="k" ? true :false},
                ]},
         );

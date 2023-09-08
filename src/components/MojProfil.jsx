@@ -60,13 +60,13 @@ axios.put("http://127.0.0.1:8000/api/user/"+ window.sessionStorage.getItem("user
             <MDBRow className='g-0'>
 
               <MDBCol md='6' className="d-none d-md-block">
-                <MDBCardImage src="../pics/bm_logo.png" alt="Sample photo" width={900+'px'} className="rounded-start" fluid/>
+                <MDBCardImage src="../pics/profile.png" alt="Sample photo" width={900+'px'} className="rounded-start" fluid/>
               </MDBCol>
 
               <MDBCol md='6'>
 
-                <MDBCardBody className='text-black d-flex flex-column justify-content-center'>
-                  <h3 className="mb-5 text-uppercase fw-bold">Vasi podaci</h3>
+                <MDBCardBody className='text-black d-flex flex-column justify-content-center' style={{backgroundColor:'#A0BFE0'}}>
+                  <h3 className="mb-5 text-uppercase fw-bold" style={{textAlign:'center'}}>Izmenite podatke</h3>
                   <MDBRow>
 
                             <MDBCol md='6'>
@@ -93,12 +93,12 @@ axios.put("http://127.0.0.1:8000/api/user/"+ window.sessionStorage.getItem("user
                       <MDBInput wrapperClass='mb-4' label='Email'  name= "email"  onInput={dodaj} size='lg' id='form2' type='email' />
                           </MDBCol>
                  </MDBRow>
-                      <MDBInput wrapperClass='mb-4' label='Lozinka'  name= "password"  onInput={dodaj} size='lg' id='form4' type='password' />
+                      <MDBInput wrapperClass='mb-4' label='Lozinka (unos obavezan)'  name= "password"  onInput={dodaj} size='lg' id='form4' type='password' />
           
 
 
-                  <div className="d-flex justify-content-end pt-3">
-                    <button className='ms-2' color='warning' size='lg' onClick={izmeniUsera}>Izmeni podatke</button>
+                  <div className="d-flex justify-content-center pt-3"  >
+                    <button className='ms-2'  size='lg' style={{backgroundColor:'white', color:'#4A55A2', width:'250px', fontWeight:'bold' ,borderColor:'white'}} onClick={izmeniUsera}>Izmeni podatke</button>
                   </div>
 
 

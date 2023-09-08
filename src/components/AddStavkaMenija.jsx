@@ -24,7 +24,7 @@ function AddStavkaMenija({vrsteSM}) {
     opsirnije: "",
     napomene:"",
     jedinicaMere:"",
-    vrstaStavkeMenija_id:0
+    vrstaStavkeMenija_id:1
     
   });
 
@@ -69,13 +69,13 @@ function AddStavkaMenija({vrsteSM}) {
           <MDBRow className='g-0'>
 
             <MDBCol md='6' className="d-none d-md-block">
-              <MDBCardImage src="../slike/s2.jpg" alt="Sample photo" width={500+'px'} className="rounded-start" fluid/>
+              <MDBCardImage src="../pics/rest.png" alt="Sample photo" width={700+'px'} height={700+'px'}   className="rounded-start" fluid/>
             </MDBCol>
 
             <MDBCol md='6'>
 
               <MDBCardBody className='text-black d-flex flex-column justify-content-center'>
-                <h3 className="mb-5 text-uppercase fw-bold">Forma za izmenu podataka o stavki menija</h3>
+                <h3 className="mb-5 text-uppercase fw-bold">Forma za unos nove stavke u meni</h3>
 
                 <MDBInput wrapperClass='mb-4'  label='Naziv stavke:'  onInput={dodaj} name= "naziv" size='lg' id='form1' type='text' />
                 <MDBInput wrapperClass='mb-4'  label='Cena stavke:'  onInput={dodaj} name= "cena" size='lg' id='form2' type='number' />
@@ -88,13 +88,14 @@ function AddStavkaMenija({vrsteSM}) {
                   </MDBRow >
                   <MDBRow className='g-0'>
 
-                <select class="form-select"  id= "form6" onChange={dodaj} name= "vrstaStavkeMenija_id" >
+                <select class="form-select" style={{marginTop:'50px'}} id= "form6" onChange={dodaj} name= "vrstaStavkeMenija_id" >
                 { !Array.isArray(vrsteSM) ? <p>Ne postoji nijedna vrsta stavke menija!</p> : vrsteSM.map((vrsta) => (
        <option value={vrsta.id}>{vrsta.naziv}</option>
      ))} </select>
      </MDBRow>
                  <div className="d-flex justify-content-end pt-3">
-                  <button className='btnForma' color='warning' size='lg' onClick={dodajStavku}>Dodaj stavku menija</button>
+                  <button className='ms-2'  size='lg' style={{padding:'2px', margin:'25px', backgroundColor:'white', color:'#606C5D', width:'700px', fontWeight:'bold' ,borderColor:'#606C5D', fontFamily:'sans-serif', borderRadius:'8px'}}
+                   onClick={dodajStavku}>Dodaj stavku menija</button>
                 </div>
 
 

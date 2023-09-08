@@ -43,8 +43,9 @@ const LoginPage = (props) => {
     
                     <MDBInput wrapperClass='mb-4' label='Broj telefona, email adresa ili korisnicko ime' id='formControlLg' type='text' name="email" size="lg" onInput={props.dodajUsername} />
                     <MDBInput wrapperClass='mb-4' label='Lozinka' id='formControlLg' type='password' name='password' size="lg" onInput={props.dodajLozinku}/>
-    
-                  <button className="btnLogin"  type='submit' size='lg' onClick={props.login}>Login</button>
+                    <div className="d-flex justify-content-center pt-3">
+                  <button className='ms-2'  size='lg' style={{backgroundColor:'white', color:'#606C5D', width:'4000px', fontWeight:'bold' ,borderColor:'#606C5D', fontFamily:'sans-serif', borderRadius:'8px'}} onClick={props.login}>Login</button>
+               </div>
                   <p className="mb-5 pb-lg-2" style={{color: '#393f81'}}>Nemate nalog? <a href="/register" style={{color: '#393f81'}}>Registrujte se</a></p>
     
                   

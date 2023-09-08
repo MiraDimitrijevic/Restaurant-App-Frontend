@@ -23,7 +23,7 @@ function ZaposleniRegisterPage() {
     email: "",
     brojTelefona:"",
     password: "",
-    userType:""
+    userType:"m"
  });
  function dodaj(e){
     let data=podaciZaRegistraciju;
@@ -86,7 +86,7 @@ alert("Uspesno ste registrovali konobara!");
               <MDBCol md='6'>
 
                 <MDBCardBody className='text-black d-flex flex-column justify-content-center'>
-                  <h3 className="mb-5 text-uppercase fw-bold">Forma za registraciju zaposlenog</h3>
+                  <h3 className="mb-5 text-uppercase fw-bold" style={{textAlign:'center'}}>Forma za registraciju zaposlenog</h3>
                   <MDBRow>
 
                             <MDBCol md='6'>
@@ -118,8 +118,8 @@ alert("Uspesno ste registrovali konobara!");
                 <option value="m">Menadzer</option>
                   <option value="k">Konobar</option>
                   </select>
-                    <div className="d-flex justify-content-end pt-3">
-                    <button className='ms-2' color='warning' size='lg' onClick={register}>Registruj zaposlenog</button>
+                    <div className="d-flex justify-content-center pt-3" >
+                    <button  className='ms-2'  size='lg' style={{backgroundColor:'white', color:'#606C5D', width:'4000px', fontWeight:'bold' ,borderColor:'#606C5D', fontFamily:'sans-serif', borderRadius:'8px'}} onClick={register}>Registruj zaposlenog</button>
                   </div>
 
 

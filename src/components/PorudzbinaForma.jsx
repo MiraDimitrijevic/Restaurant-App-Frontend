@@ -26,12 +26,14 @@ function PorudzbinaForma({stavkePorudzbine , showModal2 , obrisiStavku, poruci} 
   return (
     
 
-    <MDBContainer fluid  className={showModal2}>
+    <MDBContainer fluid  className={showModal2}  style={{textAlign:'center', justifyContent:'center'}}>
 
     <MDBRow className='d-flex justify-content-center align-items-center h-100'>
       <MDBCol>
 
         <MDBCard className='my-4'>
+        <MDBCardBody className='text-black d-flex flex-column justify-content-center' style={{backgroundColor:'#A0BFE0'}}>
+                  <h5 className="mb-5 text-uppercase fw-bold" style={{textAlign:'center'}}>Stavke porudzbine</h5>
         <div className="stavkePor">
          
           
@@ -40,9 +42,10 @@ function PorudzbinaForma({stavkePorudzbine , showModal2 , obrisiStavku, poruci} 
        
      ))}
         <MDBRow className='g-0'>
-        <button  type='submit' size='lg' onClick={poruci}>Poruci</button>
+        <button  type='submit' size='lg' className='ms-2' style={{backgroundColor:'white', color:'#4A55A2', width:'250px', fontWeight:'bold' ,borderColor:'white'}} onClick={poruci}>Poruci</button>
           </MDBRow>
           </div>
+          </MDBCardBody>
         </MDBCard>
 
       </MDBCol>

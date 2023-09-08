@@ -12,8 +12,10 @@ function Smene() {
 
  
   return (<>
- 
-    <table id="tableSmene" class="display" >
+  <div style={{maxHeight:'20px'}}>
+ <h3 className="mb-5 text-uppercase fw-bold" style={{textAlign:'center', color:'#1D5D9B'}}>SMENE</h3>
+ </div>
+    <table id="tableSmene" class="display" style={{backgroundColor: '#E4F1FF'}}>
     <thead><tr>
       <th id="idStavke">Rbr</th>
         <th>Datum</th>

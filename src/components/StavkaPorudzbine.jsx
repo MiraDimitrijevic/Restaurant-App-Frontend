@@ -27,11 +27,14 @@ function StavkaPorudzbine({stavka, obrisiStavku} ) {
       <MDBCol>
 
         <MDBCard className='my-4'>
-            <MDBRow>
-            <MDBCol><p>{stavka.naziv}</p></MDBCol>
-            <MDBCol><p>{stavka.kolicina}</p></MDBCol>
-            <MDBCol>                 <div className="d-flex justify-content-end pt-3">
-                  <button className='btnForma' color='warning' size='lg' onClick={()=>{obrisiStavku(stavka.stavka_menija_id);
+            <MDBRow >
+            <MDBCol  style={{textAlign:'center', backgroundColor:'#A0BFE0',fontWeight:'bold'}}><p>{stavka.naziv}</p></MDBCol>
+            <MDBCol  style={{textAlign:'center', backgroundColor:'#A0BFE0',fontWeight:'bold',
+             fontSize:20, padding:'10px'}}><p>{stavka.kolicina}</p></MDBCol>
+            <MDBCol  style={{textAlign:'center', backgroundColor:'#A0BFE0',fontWeight:'bold'}}>               
+               <div className="d-flex justify-content-end pt-3">
+                  <button className='btnForma'  style={{backgroundColor:'white', color:'#4A55A2', fontWeight:'bold' ,borderColor:'white'}}
+                   size='lg' onClick={()=>{obrisiStavku(stavka.stavka_menija_id);
                 if(stavka.kolicina==0) setVisible('ghost'); }}>-</button>
                 </div>
             </MDBCol>

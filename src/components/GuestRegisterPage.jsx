@@ -96,8 +96,8 @@ navigate("/login");
           
 
 
-                  <div className="d-flex justify-content-end pt-3">
-                    <button className='ms-2' color='warning' size='lg' onClick={register}>Registruj se</button>
+                  <div className="d-flex justify-content-center pt-3">
+                    <button className='ms-2'  size='lg' style={{backgroundColor:'white', color:'#606C5D', width:'4000px', fontWeight:'bold' ,borderColor:'#606C5D', fontFamily:'sans-serif', borderRadius:'8px'}} onClick={register}>Registruj se</button>
                   </div>
 
                   <p className="mb-5 pb-lg-2" style={{color: '#393f81'}}>Imate nalog? <a href="/login" style={{color: '#393f81'}}>Prijavite se</a></p>
