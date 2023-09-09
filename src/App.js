@@ -146,7 +146,7 @@ navigate("/meni");
   }
   };
 if(stavkaPostoji==false)
-setStavkePorudzbine([...stavkePorudzbine ,{"stavka_menija_id":stavka.id,"naziv":stavka.naziv, "kolicina":1,"iznos":0}] ) ;
+setStavkePorudzbine([...stavkePorudzbine ,{"stavka_menija_id":stavka.id,"naziv":stavka.naziv, "kolicina":1}] ) ;
     
   }
 
@@ -190,9 +190,9 @@ setStavkePorudzbine([...stavkePorudzbine ,{"stavka_menija_id":stavka.id,"naziv":
       },
     }).then((res) =>{
        if(res.data.success=== true) {
-      alert("Korisnik je dobio popust od 20%!" );
+      alert("Gost je dobio popust od 20%!" );
 window.location.reload(true);
-    } else {      alert("Korisnik ne moze dobiti popust zbog zaduzenja!" );
+    } else {      alert("Gost ne moze dobiti popust zbog zaduzenja!" );
   }
     }).catch((error)=>{
       console.error(error.response.data);
@@ -207,6 +207,7 @@ window.location.reload(true);
       Authorization: `Bearer ${window.sessionStorage.getItem('token')}`,
     },
   }).then((res) =>{
+    
     setStavkePorudzbine(res.data.stavke);
 });
 navigate("/porudzbina");
@@ -222,7 +223,7 @@ var konobar_id= window.sessionStorage.getItem("userType_id");
       }).then((res) =>{
         console.log(res.data);
         if(res.data.success === true) {
-          alert("Smena uspesno zakljucena! Ukupan promet: "+res.data.ukupanPromet);
+          alert("Smena uspesno zakljucena!");
           window.location.reload(true);
    }
     else {
@@ -369,7 +370,7 @@ var konobar_id= window.sessionStorage.getItem("userType_id");
               {"data":"datumVremePorudzbine"},
                 { "data": "gost.licniPodaci.ime" },
                 { "data": "gost.licniPodaci.prezime"},
-                { "data": "popust" },
+                { "data": "saPopustom" },
                 { "data": "ukupnaCena" },
                 { "data": "placeno" },
                 { "data": "konobar.licniPodaci.korisnickoIme" },

@@ -23,12 +23,12 @@ function NavBar(props) {
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
           <li className="nav-item">
-        { "" != window.sessionStorage.getItem("token") ?
+        { "" != window.sessionStorage.getItem("token") && null != window.sessionStorage.getItem("token") ?
          ( <a className="nav-link active"  onClick={setToken} aria-current="page" href="/meni" style={{ fontWeight:'bold'}}>Meni</a> ) :  
          ( <a  className="nav-link disabled"  onClick={setToken} aria-current="page"  tabindex="-1" aria-disabled="true" href="/meni">Meni</a> ) }
           </li>
      ,     <li className="nav-item">
-        { "" != window.sessionStorage.getItem("token") ? 
+        { "" != window.sessionStorage.getItem("token") && null != window.sessionStorage.getItem("token") ? 
         ( <a className="nav-link active"  onClick={setToken} aria-current="page" href="/profil" style={{ fontWeight:'bold'}}>Moj profil</a> )
          :  ( <a  className="nav-link disabled"  onClick={setToken} aria-current="page"  tabindex="-1" aria-disabled="true" href="/profil">Moj profil</a> ) }
           </li>
